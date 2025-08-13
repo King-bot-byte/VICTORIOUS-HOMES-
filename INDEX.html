@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Victorious Homes — Real Estate & Urban Planning</title>
+  <meta name="description" content="Victorious Homes — premium real estate development, planning, and property management." />
+  <meta name="description" content="Victorious Homes offers premium real estate, modern home designs, and expert urban planning. Explore properties, connect with agents, and plan your dream home today.">
+
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script>
+  gsap.from("header", { opacity: 0, y: -50, duration: 1 });
+  gsap.from(".property-card", { opacity: 0, scale: 0.8, duration: 1, stagger: 0.2 });
+</script>
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+  AOS.init({
+    duration: 1000, // Animation speed
+    once: true      // Only animate once
+  });
+</script>
+<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script>
+  gsap.from(".hero-title", { duration: 1, y: -50, opacity: 0 });
+</script>
+<!-- AOS CSS -->
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+
+<!-- AOS JS -->
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+<script>
+  AOS.init({
+    duration: 1000,
+    once: true
+  });
+</script>
+
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="brand">
+      <div class="logo">🏛️</div>
+      <div>
+        <h1>Victorious Homes</h1>
+        <small>Design • Plan • Deliver</small>
+      </div>
+    </div>
+    <nav class="main-nav">
+      <a href="#hero">Home</a>
+      <a href="#properties">Properties</a>
+      <a href="#planner">Planner</a>
+      <a href="#why">Why Us</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- HERO: Video + Image with PiP & switch -->
+  <section id="hero" class="hero">
+    <div class="media-wrap">
+      <video id="heroVideo" src="VID.mp4" playsinline muted loop crossorigin="anonymous"></video>
+      <img id="heroImage" src="victorious.png" alt="Victorious Homes Showcase">
+    </div>
+    <div class="hero-overlay">
+      <h2>Building Dreams. Planning Futures.</h2>
+      <p>Premium real estate & urban planning. Trusted, transparent, Victorious.</p>
+      <div class="hero-actions">
+        <button id="switchMediaBtn">Switch to Image</button>
+        <button id="pipBtn">Toggle PiP (Video)</button>
+        <a class="cta" href="#properties">View Featured Properties</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK STATS -->
+  <section class="quick-stats">
+    <div class="stat">🏗️ <strong>120+</strong> Projects</div>
+    <div class="stat">📍 <strong>10</strong> Cities</div>
+    <div class="stat">👥 <strong>500+</strong> Happy Clients</div>
+    <div class="stat">🔒 <strong>Trusted</strong> Since 2010</div>
+  </section>
+
+  <!-- PROPERTIES with filter and 3D viewer -->
+  <section id="properties" class="properties">
+    <div class="section-head">
+      <h2>Featured Properties</h2>
+      <div class="filters">
+        <select id="filterType">
+          <option value="all">All Types</option>
+          <option value="villa">Villa</option>
+          <option value="apartment">Apartment</option>
+          <option value="office">Office</option>
+        </select>
+        <input id="filterSearch" placeholder="Search city or name...">
+      </div>
+    </div>
+
+    <div class="property-grid" id="propertyGrid">
+      <!-- property cards injected by JS -->
+    </div>
+
+    <h3 style="margin-top:2rem">Explore a property in 3D</h3>
+    <div class="viewer-controls">
+      <button id="viewerReset">Reset View</button>
+      <label>Drag to rotate • Use buttons to spin</label>
+      <div class="spin-buttons">
+        <button data-rot="90">⟲ 90°</button>
+        <button data-rot="-90">90° ⟳</button>
+      </div>
+    </div>
+    <div class="three-viewer" id="threeViewer" aria-hidden="false" title="3D Property Viewer">
+      <div class="cube" id="cube">
+        <div class="face front"><img src="villa.webp" alt="Front view"></div>
+        <div class="face back"><img src="office.jpg" alt="Back view"></div>
+        <div class="face right"><img src="beachfront.webp" alt="Right view"></div>
+        <div class="face left"><img src="cottage.webp" alt="Left view"></div>
+        <div class="face top"><img src="cottage.webp" alt="Top view"></div>
+        <div class="face bottom"><img src="urban.webp" alt="Bottom view"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANNER / Mortgage Calculator & Site Planner -->
+  <section id="planner" class="planner">
+    <h2>Mortgage Calculator & Site Planner</h2>
+    <div class="planner-grid">
+      <div class="mortgage-card">
+        <h3>Mortgage Calculator</h3>
+        <label>Loan Amount (₦)</label>
+        <input id="loanAmount" type="number" value="50000000">
+        <label>Annual Interest Rate (%)</label>
+        <input id="interestRate" type="number" step="0.01" value="9.5">
+        <label>Term (years)</label>
+        <input id="loanYears" type="number" value="20">
+        <button id="calcMortgage">Calculate</button>
+
+        <div id="mortgageResult" class="mortgage-result" hidden>
+          <p>Monthly Payment: <strong id="monthlyPay"></strong></p>
+          <p>Total Payment: <strong id="totalPay"></strong></p>
+          <p>Total Interest: <strong id="totalInterest"></strong></p>
+          <button id="downloadAmort">Download Amortization CSV</button>
+        </div>
+      </div>
+
+      <div class="site-planner">
+        <h3>Quick Site Planner (Area → Units)</h3>
+        <label>Site Area (sqm)</label>
+        <input id="siteArea" type="number" value="1000">
+        <label>Avg Unit Size (sqm)</label>
+        <input id="unitSize" type="number" value="80">
+        <button id="calcUnits">Estimate Units</button>
+        <div id="unitsResult" hidden class="units-result"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US & testimonials -->
+  <section id="why" class="why-choose">
+    <h2>Why Victorious Homes</h2>
+    <div class="why-grid">
+      <div class="why-card">✅ End-to-end project delivery</div>
+      <div class="why-card">🎯 Data-driven urban planning</div>
+      <div class="why-card">🤝 Transparent contracts</div>
+      <div class="why-card">🌿 Sustainable & efficient designs</div>
+    </div>
+
+    <h3>Client Testimonials</h3>
+    <div class="testimonials">
+      <blockquote>"Victorious transformed our land into a beautiful housing estate — professional and fast." — A. Okoye</blockquote>
+      <blockquote>"The planning team saved us months of work and thousands in cost." — L. Musa</blockquote>
+    </div>
+  </section>
+  <br><br>
+<style>
+  /* ==== Mobile-first base styles ==== */
+body {
+  font-size: 16px;
+  line-height: 1.5;
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+/* Adjust for very small devices (under 400px) */
+@media (max-width: 400px) {
+  .hero h2 { font-size: 20px; }
+  .hero p { font-size: 14px; }
+  .main-nav { flex-direction: column; gap: 8px; }
+  .quick-stats { grid-template-columns: 1fr; }
+  .planner-grid, .why-grid, .contact-grid { grid-template-columns: 1fr; }
+}
+
+/* ==== Tablet styles ==== */
+@media (min-width: 600px) and (max-width: 899px) {
+  .logo { flex: 0 0 auto; text-align: left; }
+  .main-nav { flex: 1 0 auto; justify-content: flex-end; }
+  .hero h2 { font-size: 28px; }
+  .hero p { font-size: 16px; }
+  .quick-stats { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+}
+
+/* ==== Desktop styles ==== */
+@media (min-width: 900px) and (max-width: 1199px) {
+  .hero { grid-template-columns: repeat(2, 1fr); text-align: left; }
+  .quick-stats { grid-template-columns: repeat(4, 1fr); }
+  .planner-grid, .why-grid { grid-template-columns: repeat(3, 1fr); }
+  .contact-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ==== Large desktop / Wide screens ==== */
+@media (min-width: 1200px) {
+  .hero h2 { font-size: 36px; }
+  .hero p { font-size: 18px; max-width: 700px; }
+  .planner-grid, .why-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ==== Chat widget tweaks ==== */
+.chat-widget {
+  width: 300px;
+  height: 450px;
+  bottom: 15px;
+  right: 15px;
+  border-radius: 12px;
+}
+
+@media (min-width: 900px) {
+  .chat-widget {
+    width: 350px;
+    height: 500px;
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+  @media (max-width: 420px) {
+  .hero { padding: 10px; }
+  .media-wrap { height: 220px; }
+}
+
+    /* HERO */
+  .l {
+    display:grid;
+    grid-template-columns: 1fr 420px;
+    gap: var(--gap);
+    align-items:center;
+    margin-bottom:30px;
+  }
+  .l-card {
+    background:#fff;
+    padding:28px;
+    border-radius:14px;
+    box-shadow: var(--card-shadow);
+    overflow:hidden;
+    position:relative;
+  }
+  .l-title{ font-size:28px; color:var(--accent); margin:0 0 12px; letter-spacing:0.6px;}
+  .l-sub{ color:#555; margin:0 0 20px;}
+  .l-cta{ display:inline-block; padding:10px 14px; border-radius:8px; background:#0b6; color:white; text-decoration:none; font-weight:600;}
+
+  /* subtle parallax background */
+  .l-art {
+    height:220px;
+    border-radius:12px;
+    overflow:hidden;
+    position:relative;
+  }
+  .l-art img{ width:120%; height:100%; object-fit:cover; object-position:center; transform:translateX(-10%); transition:transform 1.2s ease; will-change:transform;}
+  .l-card:hover .l-art img{ transform:translateX(0%); }
+
+  /* AGENTS GRID */
+  .agents {
+    display:grid;
+    grid-template-columns: repeat(auto-fill,minmax(220px,1fr));
+    gap:var(--gap);
+  }
+  .agent {
+    background:#fff;
+    border-radius:12px;
+    padding:12px;
+    box-shadow: var(--card-shadow);
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    align-items:center;
+    text-align:center;
+    transition: transform .35s cubic-bezier(.2,.9,.2,1), box-shadow .35s;
+    position:relative;
+    overflow:visible;
+  }
+  .agent:hover{ transform: translateY(-10px); box-shadow: 0 18px 40px rgba(15,23,36,0.18); }
+
+  .agent-photo {
+    width:120px;
+    height:120px;
+    border-radius:999px;
+    overflow:hidden;
+    flex:0 0 auto;
+    background:linear-gradient(180deg,#e9eef2,#f8f9fb);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+  .agent-photo img {
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    object-position:center; /* IMPORTANT for faces */
+    display:block;
+    transition: transform .8s ease, filter .6s;
+    will-change:transform;
+  }
+  .agent .name{ font-weight:700; color:var(--accent); font-size:15px; margin:0;}
+  .agent .title{ color:#666; font-size:13px; margin:0; }
+  .agent .meta { font-size:12px; color:#888; }
+
+  /* reveal overlay on load (fade + slide) */
+  .reveal {
+    opacity:0;
+    transform: translateY(10px);
+    transition: all 600ms cubic-bezier(.2,.9,.2,1);
+  }
+  .reveal.in { opacity:1; transform: translateY(0); }
+
+  /* broken/fallback */
+  .avatar-fallback {
+    display:flex; align-items:center; justify-content:center;
+    width:100%; height:100%;
+    color:#9aa3ad; font-size:28px;
+  }
+
+  /* responsive */
+  @media (max-width:880px){
+    .hero { grid-template-columns: 1fr; }
+    .hero-art{ height:180px; }
+  }
+  /* ==== Tablet styles ==== */
+@media (min-width: 600px) {
+  .logo { flex: 0 0 auto; text-align: left; }
+  .main-nav { flex: 1 0 auto; justify-content: flex-end; }
+  .hero h2 { font-size: 28px; }
+  .hero p { font-size: 16px; }
+}
+
+/* ==== Desktop styles ==== */
+@media (min-width: 900px) {
+  .hero { grid-template-columns: repeat(2, 1fr); text-align: left; }
+  .quick-stats { grid-template-columns: repeat(4, 1fr); }
+  .planner-grid, .why-grid { grid-template-columns: repeat(3, 1fr); }
+  .contact-grid { grid-template-columns: repeat(2, 1fr); }
+  .chat-widget {
+    width: 350px;
+    height: 500px;
+    bottom: 20px;
+    right: 20px;
+    border-radius: 12px;
+  }
+}
+</style>
+</head>
+<body>
+
+    <div class="l-card reveal" id="rightCard">
+      <h3 style="margin-top:0">Featured Agent</h3>
+      <div style="display:flex;gap:12px;align-items:center">
+        <div style="width:64px;height:64px;border-radius:12px;overflow:hidden;flex:0 0 64px">
+          <img id="featuredImg" style="width:100%;height:100%;object-fit:cover;display:block" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Crect width='100%' height='100%' fill='%23eee'/%3E%3C/svg%3E" alt="featured agent">
+        </div>
+        <div>
+          <strong>Mrs. Ada E.</strong><br><small class="meta">Lead Sales Agent</small>
+        </div>
+      </div>
+      <p style="margin-top:12px;color:#666">Call: +234 800 000 0000 — available Mon–Fri</p>
+    </div>
+  </div>
+
+  <h2 id="agents" style="margin:10px 0 18px">Our Agents</h2>
+
+  <div class="agents" id="agentsGrid">
+    <!-- Agent cards (replace data-src with your actual URLs) -->
+    <div class="agent reveal">
+      <div class="agent-photo">
+        <img data-src="ada.png" alt="Mrs Ada E — Victorious Home agent" onerror="this.style.display='none';this.parentElement.innerHTML='<div class=&quot;avatar-fallback&quot;>AE</div>'">
+      </div>
+      <p class="name">Mrs. Ada E.</p>
+      <p class="title">Lead Sales Agent</p>
+      <p class="meta">Specialist: Luxury & Family Homes</p>
+    </div>
+
+    <div class="agent reveal">
+      <div class="agent-photo">
+        <img data-src="JOHN K.png" alt="Mr Oluwaseun — Victorious Home agent" onerror="this.style.display='none';this.parentElement.innerHTML='<div class=&quot;avatar-fallback&quot;>OS</div>'">
+      </div>
+      <p class="name">Mr. John K.</p>
+      <p class="title">Urban Planner</p>
+      <p class="meta">Specialist: Site Planning</p>
+    </div>
+
+    <div class="agent reveal">
+      <div class="agent-photo">
+        <img data-src="imani.png" alt="Maria — Victorious Home agent" onerror="this.style.display='none';this.parentElement.innerHTML='<div class=&quot;avatar-fallback&quot;>M</div>'">
+      </div>
+      <p class="name">Mrs Imani A.</p>
+      <p class="title">Sales Agent</p>
+      <p class="meta">Specialist: Family Neighborhoods</p>
+    </div>
+
+    <!-- add more cards as needed -->
+  </div>
+</div>
+
+<script>
+/* 1) reveal on load */
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.reveal').forEach((el,i) => {
+    setTimeout(()=> el.classList.add('in'), 120 + i*90);
+  });
+
+  // 2) lazy-load images with IntersectionObserver
+  const imgs = Array.from(document.querySelectorAll('img[data-src]'));
+  if('IntersectionObserver' in window && imgs.length){
+    const obs = new IntersectionObserver((entries, o) => {
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          const img = e.target;
+          img.src = img.getAttribute('data-src');
+          img.removeAttribute('data-src');
+          o.unobserve(img);
+        }
+      });
+    }, {rootMargin:'120px'});
+    imgs.forEach(i=>obs.observe(i));
+  } else {
+    // fallback: load all
+    imgs.forEach(i=> i.src = i.getAttribute('data-src'));
+  }
+
+  // 3) Set featured image to first agent after it loads (small UX touch)
+  const first = document.querySelector('.agents img');
+  if(first){
+    first.addEventListener('load', ()=> {
+      document.getElementById('featuredImg').src = first.src;
+    });
+    // if already loaded or cached:
+    if(first.complete && first.src) document.getElementById('featuredImg').src = first.src;
+  }
+});
+
+/* 4) Optional: subtle floating effect on agent images */
+(function floatLoop(){
+  const photos = document.querySelectorAll('.agent-photo img');
+  let t = 0;
+  function step(){
+    t += 0.02;
+    photos.forEach((img, idx) => {
+      const offset = Math.sin(t + idx*0.6) * 2; // px
+      img.style.transform = `translateY(${offset}px)`;
+    });
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+})();
+</script>
+</body>
+</html>
+
+  <!-- CONTACT & Newsletter -->
+  <section id="contact" class="contact-section">
+    <div class="contact-grid">
+      <div class="contact-card">
+        <h2>Contact Us</h2>
+        <form id="contactForm">
+          <input id="cname" required placeholder="Name">
+          <input id="cemail" type="email" required placeholder="Email">
+          <input id="cphone" placeholder="Phone">
+          <textarea id="cmessage" required placeholder="Message..."></textarea>
+          <button type="submit">Send Message</button>
+        </form>
+      </div>
+      <div class="newsletter-card">
+        <h3>Subscribe to Updates</h3>
+        <p>Get market reports, new projects & offers.</p>
+        <input id="newsletterEmail" placeholder="you@mail.com">
+        <button id="subscribeBtn">Subscribe</button>
+        <div class="contact-info">
+          <p>📍 Lagos, Nigeria</p>
+          <p>✉️ hello@victorioushomes.ng</p>
+          <p>📞 +234 916 544 5200</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div>© <span id="year"></span> Victorious Homes</div>
+    <div class="socials">Follow: <a href="#">LinkedIn</a> • <a href="#">Instagram</a></div>
+  </footer>
+
+  <!-- LIVE CHAT WIDGET -->
+  <div id="chatWidget" class="chat-widget closed">
+    <div class="chat-header">
+      <strong>Victorious Support</strong>
+      <button id="closeChat">✕</button>
+    </div>
+    <div class="chat-body" id="chatBody"></div>
+    <div class="chat-foot">
+      <input id="chatInput" placeholder="Ask about properties, pricing, planning..." />
+      <button id="sendChat">Send</button>
+    </div>
+  </div>
+  <button id="chatToggle" class="chat-toggle">💬 Chat</button>
+
+  <script src="script.js"></script>
+</body>
+</html>
+<style>
+    :root{
+  --accent:#0b5cff;
+  --gold:#f5b800;
+  --dark:#0f1724;
+  --muted:#6b7280;
+  --card-bg:#ffffff;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:Inter,system-ui,Segoe UI,Arial;
+  background:#f3f4f6;color:#111;
+  -webkit-font-smoothing:antialiased;
+}
+.site-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 28px;background:linear-gradient(90deg,var(--dark),#102a43);
+  color:white;position:sticky;top:0;z-index:60;
+}
+.brand{display:flex;gap:12px;align-items:center}
+.brand h1{font-size:20px;margin:0}
+.brand small{color:#cbd5e1}
+.main-nav a{color:#e6eef8;margin-left:18px;text-decoration:none;font-weight:600}
+.hero{
+  height:78vh;display:grid;grid-template-columns:1fr 380px;align-items:center;padding:20px;
+  gap:20px;position:relative;overflow:hidden;
+}
+.media-wrap{position:relative;height:100%;border-radius:12px;overflow:hidden;box-shadow:0 10px 30px rgba(2,6,23,0.25)}
+.media-wrap video, .media-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-overlay{padding:28px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.3));border-radius:12px;color:white;}
+.hero h2{font-size:28px;margin-bottom:8px}
+.hero p{margin-bottom:16px;color:var(--muted)}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+button, .cta{border:none;padding:10px 14px;border-radius:8px;background:var(--gold);cursor:pointer;font-weight:700}
+.cta{background:var(--accent);color:white;text-decoration:none;display:inline-block}
+.quick-stats{display:flex;gap:12px;padding:16px 28px;justify-content:space-around;background:#fff;margin:16px 28px;border-radius:10px;box-shadow:0 6px 18px rgba(2,6,23,0.05)}
+.stat{font-weight:700;color:var(--dark)}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.filters{display:flex;gap:8px;align-items:center}
+.filters select, .filters input{padding:8px;border-radius:8px;border:1px solid #e6e9ee}
+.properties{padding:28px}
+.property-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:18px}
+.property-card{background:var(--card-bg);border-radius:12px;padding:12px;box-shadow:0 6px 18px rgba(2,6,23,0.06);transition:transform .25s}
+.property-card:hover{transform:translateY(-6px)}
+.property-card img{width:100%;height:160px;object-fit:cover;border-radius:8px}
+.property-card h3{margin:8px 0 4px;font-size:18px}
+.property-card p{color:var(--muted);font-size:14px}
+.three-viewer{width:100%;height:360px;display:flex;align-items:center;justify-content:center;perspective:1200px;margin-top:18px}
+.cube{position:relative;width:320px;height:220px;transform-style:preserve-3d;transition:transform .6s}
+.face{position:absolute;inset:0;border-radius:10px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,0.06)}
+.face img{width:100%;height:100%;object-fit:cover}
+.face.front{transform:translateZ(160px)}
+.face.back{transform:rotateY(180deg) translateZ(160px)}
+.face.right{transform:rotateY(90deg) translateZ(160px)}
+.face.left{transform:rotateY(-90deg) translateZ(160px)}
+.face.top{transform:rotateX(90deg) translateZ(160px)}
+.face.bottom{transform:rotateX(-90deg) translateZ(160px)}
+.viewer-controls{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:8px}
+.planner{padding:28px;background:#fff;margin:16px 28px;border-radius:12px;box-shadow:0 8px 30px rgba(2,6,23,0.04)}
+.planner-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.mortgage-card{padding:12px}
+.mortgage-card input, .site-planner input{width:100%;padding:8px;margin:8px 0;border-radius:8px;border:1px solid #e6e9ee}
+.mortgage-result p{margin:8px 0}
+.why-choose{padding:28px}
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.why-card{background:#fff;padding:18px;border-radius:8px;box-shadow:0 8px 20px rgba(2,6,23,0.04);text-align:center}
+.testimonials{margin-top:12px;color:var(--muted)}
+.agent-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;padding:12px}
+.agent-card{background:#fff;padding:12px;border-radius:8px;text-align:center}
+.agent-card img{width:100%;height:160px;object-fit:cover;border-radius:8px}
+.contact-section{padding:28px}
+.contact-grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+.contact-card, .newsletter-card{background:#fff;padding:18px;border-radius:10px}
+.contact-card input, .contact-card textarea, .newsletter-card input{width:100%;padding:10px;margin:6px 0;border-radius:8px;border:1px solid #e6e9ee}
+.site-footer{display:flex;justify-content:space-between;padding:16px 28px;background:#0b1220;color:#cbd5e1}
+.chat-toggle{position:fixed;right:20px;bottom:20px;padding:14px;border-radius:999px;background:var(--accent);color:white;border:none;box-shadow:0 8px 24px rgba(11,92,255,0.18);cursor:pointer}
+.chat-widget{position:fixed;right:20px;bottom:80px;width:340px;height:460px;background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(2,6,23,0.2);display:flex;flex-direction:column;overflow:hidden;z-index:200;transform:translateY(20px);transition:transform .2s,opacity .2s}
+.chat-widget.closed{opacity:0;pointer-events:none;transform:translateY(60px) scale(.98)}
+.chat-header{background:var(--accent);color:white;padding:12px;display:flex;justify-content:space-between;align-items:center}
+.chat-body{flex:1;padding:12px;overflow:auto;background:linear-gradient(180deg,#f8fafc,#fff)}
+.chat-body .msg{margin-bottom:10px;display:flex;gap:8px}
+.msg.user{justify-content:flex-end}
+.msg .bubble{padding:8px 12px;border-radius:12px;max-width:80%;background:#f1f5f9}
+.msg.user .bubble{background:var(--accent);color:white}
+.chat-foot{display:flex;padding:8px;gap:8px;border-top:1px solid #edf2f7}
+.chat-foot input{flex:1;padding:8px;border-radius:8px;border:1px solid #e6e9ee}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr; height:62vh}
+  .planner-grid{grid-template-columns:1fr}
+  .contact-grid{grid-template-columns:1fr}
+  .why-grid{grid-template-columns:repeat(2,1fr)}
+  .three-viewer{height:300px}
+}
+</style>
+<script>
+    /* ====== Utilities & init ====== */
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* ===== HERO: Switch media & PiP for video ====== */
+const video = document.getElementById('heroVideo');
+const image = document.getElementById('heroImage');
+const switchBtn = document.getElementById('switchMediaBtn');
+const pipBtn = document.getElementById('pipBtn');
+
+let showingVideo = true;
+video.volume = 0;
+video.play().catch(()=>{ /* autoplay may be blocked */ });
+
+// initial state: show video, hide image
+image.style.display = 'none';
+
+switchBtn.addEventListener('click', () => {
+  showingVideo = !showingVideo;
+  if (showingVideo) {
+    video.style.display = 'block';
+    image.style.display = 'none';
+    switchBtn.textContent = 'Switch to Image';
+  } else {
+    video.style.display = 'none';
+    image.style.display = 'block';
+    // If currently PiP, exit PiP because PiP can't show images.
+    if (document.pictureInPictureElement) document.exitPictureInPicture().catch(()=>{});
+    switchBtn.textContent = 'Switch to Video';
+  }
+});
+
+// Picture-in-Picture toggle (video only)
+pipBtn.addEventListener('click', async () => {
+  try {
+    if (video !== document.pictureInPictureElement) {
+      await video.requestPictureInPicture();
+    } else {
+      await document.exitPictureInPicture();
+    }
+  } catch (err) {
+    alert('PiP unavailable on this browser or video not loaded.');
+    console.error(err);
+  }
+});
+
+/* ====== PROPERTIES: dataset & rendering (filter & search) ====== */
+const properties = [
+  { id:1, type:'villa', title:'Elegant 4-Bedroom Villa', city:'Lagos', price:45000000, img:'villa.webp' },
+  { id:2, type:'office', title:'Modern Office Complex', city:'Abuja', price:120000000, img:'office.jpg' },
+  { id:3, type:'apartment', title:'Beachfront Luxury Apartment', city:'Port Harcourt', price:65000000, img:'beachfront.webp' },
+  { id:4, type:'villa', title:'Hillside Cottage', city:'Ibadan', price:32000000, img:'cottage.webp' },
+  { id:5, type:'apartment', title:'Urban Loft', city:'Lagos', price:28000000, img:'urban.webp' }
+];
+
+const grid = document.getElementById('propertyGrid');
+const typeSel = document.getElementById('filterType');
+const searchInput = document.getElementById('filterSearch');
+
+function renderProps(list){
+  grid.innerHTML = '';
+  list.forEach(p=>{
+    const el = document.createElement('article');
+    el.className = 'property-card';
+    el.innerHTML = `
+      <img src="${p.img}" alt="${p.title}">
+      <h3>${p.title}</h3>
+      <p>${p.city} • ₦${(p.price).toLocaleString()}</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+        <button class="view3d" data-id="${p.id}">View 3D</button>
+        <button class="inquire" data-id="${p.id}">Inquire</button>
+      </div>
+    `;
+    grid.appendChild(el);
+  });
+}
+renderProps(properties);
+
+typeSel.addEventListener('change', applyFilter);
+searchInput.addEventListener('input', applyFilter);
+
+function applyFilter(){
+  const t = typeSel.value;
+  const q = searchInput.value.trim().toLowerCase();
+  const res = properties.filter(p => (t === 'all' || p.type === t) && (q === '' || p.title.toLowerCase().includes(q) || p.city.toLowerCase().includes(q)));
+  renderProps(res);
+}
+
+/* ====== 3D VIEWER: cube rotation & drag ====== */
+const cube = document.getElementById('cube');
+let rotX = -10, rotY = 25;
+let isDown=false, startX=0, startY=0;
+function updateCube(){ cube.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`; }
+updateCube();
+
+document.getElementById('viewerReset').addEventListener('click', ()=>{ rotX=-10; rotY=25; updateCube(); });
+document.querySelectorAll('.spin-buttons button').forEach(b=>{
+  b.addEventListener('click', ()=>{ rotY += parseInt(b.dataset.rot); updateCube(); });
+});
+
+cube.addEventListener('pointerdown', (e)=>{
+  isDown=true; startX=e.clientX; startY=e.clientY; cube.setPointerCapture(e.pointerId);
+});
+window.addEventListener('pointermove', (e)=>{
+  if(!isDown) return;
+  const dx = e.clientX - startX;
+  const dy = e.clientY - startY;
+  rotY += dx * 0.3;
+  rotX -= dy * 0.2;
+  startX = e.clientX; startY = e.clientY;
+  updateCube();
+});
+window.addEventListener('pointerup', ()=> isDown=false);
+
+// clicking "View 3D" loads that property's images onto cube faces
+grid.addEventListener('click', (e)=>{
+  if(e.target.classList.contains('view3d')){
+    const id = +e.target.dataset.id;
+    const p = properties.find(x=>x.id===id);
+    // simple heuristic: set multiple faces to same image paths if missing
+    const faces = ['villa.webp','office.jpg','','beachfront.webp','cottage.webp','beachfront.webp'];
+    document.querySelectorAll('#cube .face img').forEach((img,i)=> img.src = faces[i] || p.img);
+    window.scrollTo({top:document.getElementById('threeViewer').offsetTop - 60, behavior:'smooth'});
+  }
+});
+
+/* ====== MORTGAGE CALCULATOR & amortization CSV ====== */
+function currency(x){ return '₦' + Number(x).toLocaleString(); }
+const calcBtn = document.getElementById('calcMortgage');
+const loanAmount = document.getElementById('loanAmount');
+const rate = document.getElementById('interestRate');
+const years = document.getElementById('loanYears');
+const resultWrap = document.getElementById('mortgageResult');
+const monthlyPayEl = document.getElementById('monthlyPay');
+const totalPayEl = document.getElementById('totalPay');
+const totalInterestEl = document.getElementById('totalInterest');
+const downloadBtn = document.getElementById('downloadAmort');
+
+calcBtn.addEventListener('click', ()=>{
+  const P = Number(loanAmount.value);
+  const r = Number(rate.value) / 100 / 12;
+  const n = Number(years.value) * 12;
+  if(!P || !r || !n){ alert('Enter valid numbers'); return; }
+  const monthly = (P * r) / (1 - Math.pow(1 + r, -n));
+  const total = monthly * n;
+  const interest = total - P;
+  monthlyPayEl.textContent = currency(monthly.toFixed(2));
+  totalPayEl.textContent = currency(total.toFixed(2));
+  totalInterestEl.textContent = currency(interest.toFixed(2));
+  resultWrap.hidden = false;
+
+  // store amortization data for download
+  window._amort = generateAmort(P, r, n, monthly);
+});
+
+function generateAmort(P,r,n,monthly){
+  let bal = P, arr = [];
+  for(let i=1;i<=n;i++){
+    const interest = bal * r;
+    const principal = monthly - interest;
+    bal = bal - principal;
+    arr.push({month:i, payment:monthly, principal:principal, interest:interest, balance: Math.max(bal,0)});
+  }
+  return arr;
+}
+
+downloadBtn.addEventListener('click', ()=>{
+  if(!window._amort){ alert('Generate amortization first'); return; }
+  const rows = [['Month','Payment','Principal','Interest','Balance']];
+  window._amort.forEach(r=> rows.push([r.month, r.payment.toFixed(2), r.principal.toFixed(2), r.interest.toFixed(2), r.balance.toFixed(2)]));
+  const csv = rows.map(r=> r.join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'amortization.csv'; a.click();
+  URL.revokeObjectURL(url);
+});
+
+/* ====== SITE PLANNER - simple area->units ====== */
+document.getElementById('calcUnits').addEventListener('click', ()=>{
+  const area = Number(document.getElementById('siteArea').value);
+  const unit = Number(document.getElementById('unitSize').value);
+  if(!area || !unit){ alert('Enter valid numbers'); return; }
+  const units = Math.floor(area / unit);
+  const res = document.getElementById('unitsResult');
+  res.hidden = false;
+  res.textContent = `Estimated units: ${units} (approx.) — this assumes ${unit} sqm per unit excluding roads & amenities.`;
+});
+
+/* ====== CONTACT & newsletter (light validation + fake submit) ====== */
+document.getElementById('contactForm').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  alert('Thanks! Message received. We will contact you shortly.');
+  e.target.reset();
+});
+document.getElementById('subscribeBtn').addEventListener('click', ()=>{
+  const em = document.getElementById('newsletterEmail').value;
+  if(!em || !em.includes('@')) return alert('Enter a valid email.');
+  alert('Subscribed — check your inbox for confirmation.');
+  document.getElementById('newsletterEmail').value = '';
+});
+
+/* ====== LIVE CHAT WIDGET: basic persistent local chat + bot replies ====== */
+const chatToggle = document.getElementById('chatToggle');
+const chatWidget = document.getElementById('chatWidget');
+const closeChat = document.getElementById('closeChat');
+const chatBody = document.getElementById('chatBody');
+const chatInput = document.getElementById('chatInput');
+const sendChat = document.getElementById('sendChat');
+
+function openChat(){ chatWidget.classList.remove('closed'); chatToggle.style.display='none'; loadChatHistory(); }
+function closeChatFn(){ chatWidget.classList.add('closed'); chatToggle.style.display='block'; }
+chatToggle.addEventListener('click', openChat);
+closeChat.addEventListener('click', closeChatFn);
+
+function appendMsg(text, who='agent'){
+  const div = document.createElement('div');
+  div.className = 'msg ' + (who==='user' ? 'user' : 'agent');
+  div.innerHTML = `<div class="bubble">${text}</div>`;
+  chatBody.appendChild(div);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function saveChatHistory(arr){
+  localStorage.setItem('vh_chat', JSON.stringify(arr));
+}
+function loadChatHistory(){
+  chatBody.innerHTML='';
+  const hist = JSON.parse(localStorage.getItem('vh_chat') || '[]');
+  hist.forEach(m => appendMsg(m.text, m.who));
+}
+
+function pushChat(text, who){
+  const hist = JSON.parse(localStorage.getItem('vh_chat') || '[]');
+  hist.push({text, who, t:Date.now()});
+  saveChatHistory(hist);
+}
+
+sendChat.addEventListener('click', ()=> { sendUserChat(); });
+chatInput.addEventListener('keydown', (e)=> { if(e.key === 'Enter') sendUserChat(); });
+
+function sendUserChat(){
+  const txt = chatInput.value.trim();
+  if(!txt) return;
+  appendMsg(txt,'user');
+  pushChat(txt,'user');
+  chatInput.value='';
+  // fake bot reply with simple rules
+  setTimeout(()=> {
+    const reply = botReply(txt);
+    appendMsg(reply,'agent');
+    pushChat(reply,'agent');
+  }, 600);
+}
+
+function botReply(text){
+  const t = text.toLowerCase();
+  if(t.includes('price')||t.includes('cost')) return 'We have flexible pricing; which property are you interested in?';
+  if(t.includes('mortgage')||t.includes('loan')) return 'Try our mortgage calculator in the Planner section — it gives monthly payments and downloadable amortization.';
+  if(t.includes('agent')||t.includes('contact')) return 'One of our agents will reach out. Please share your phone or email.';
+  return 'Thanks for reaching out — we will reply within 24 hours. For urgent matters call +234 916 544 5200.';
+}
+
+/* show prompt to start chat (once) */
+if(!localStorage.getItem('vh_seen_chat_prompt')){
+  localStorage.setItem('vh_seen_chat_prompt','1');
+  setTimeout(()=> chatToggle.classList.add('pulse'), 1500);
+  setTimeout(()=> chatToggle.classList.remove('pulse'), 6500);
+}
+
+/* ====== small UX niceties ====== */
+// when user clicks "Inquire" open chat and prefill message
+grid.addEventListener('click', (e)=>{
+  if(e.target.classList.contains('inquire')){
+    const id = +e.target.dataset.id;
+    const p = properties.find(x=>x.id===id);
+    openChat();
+    setTimeout(()=> {
+      chatInput.value = `Hi, I'm interested in "${p.title}" in ${p.city}. Please send details and pricing.`;
+      chatInput.focus();
+    }, 300);
+  }
+});
+window.addEventListener("scroll", function() {
+  const cards = document.querySelectorAll(".property-card");
+  const triggerBottom = window.innerHeight * 0.85;
+
+  cards.forEach(card => {
+    const cardTop = card.getBoundingClientRect().top;
+    if(cardTop < triggerBottom) {
+      card.classList.add("show");
+    }
+  });
+});
+
+</script>

@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Victorious Homes — Real Estate & Urban Planning</title>
+  <meta name="description" content="Victorious Homes — premium real estate development, planning, and property management." />
+  <style>
+    /* ---------- Minimal / consolidated CSS (kept your visual intent) ---------- */
+    :root{ --accent:#0b5cff; --gold:#f5b800; --dark:#0f1724; --muted:#6b7280; --card-bg:#ffffff; }
+    *{box-sizing:border-box}
+    body{ margin:0;font-family:Inter,system-ui,Segoe UI,Arial;background:#f3f4f6;color:#111;-webkit-font-smoothing:antialiased;}
+    .site-header{ display:flex;align-items:center;justify-content:space-between;padding:14px 28px;background:linear-gradient(90deg,var(--dark),#102a43); color:white; position:sticky; top:0; z-index:60;}
+    .brand{display:flex;gap:12px;align-items:center}
+    .brand h1{font-size:20px;margin:0}
+    .brand small{color:#cbd5e1}
+    .main-nav a{color:#e6eef8;margin-left:18px;text-decoration:none;font-weight:600}
+
+    .hero{ height:78vh; display:grid; grid-template-columns:1fr 380px; align-items:center; padding:20px; gap:20px; position:relative; overflow:hidden; }
+    .media-wrap{ position:relative; height:100%; border-radius:12px; overflow:hidden; box-shadow:0 10px 30px rgba(2,6,23,0.25); background:#000; min-height:320px; }
+    .media-wrap video, .media-wrap img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .hero-overlay{ padding:28px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.3)); border-radius:12px; color:white; }
+    .hero h2{ font-size:28px; margin-bottom:8px }
+    .hero p{ margin-bottom:16px; color:var(--muted) }
+    .hero-actions{ display:flex; gap:12px; flex-wrap:wrap; align-items:center }
+    button, .cta{ border:none; padding:10px 14px; border-radius:8px; background:var(--gold); cursor:pointer; font-weight:700 }
+    .cta{ background:var(--accent); color:white; text-decoration:none; display:inline-block }
+
+    .quick-stats{ display:flex; gap:12px; padding:16px 28px; justify-content:space-around; background:#fff; margin:16px 28px; border-radius:10px; box-shadow:0 6px 18px rgba(2,6,23,0.05) }
+
+    /* Properties, planner, 3D viewer, agents — kept minimal but functional */
+    .properties{ padding:28px }
+    .property-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; margin-top:18px }
+    .property-card{ background:var(--card-bg); border-radius:12px; padding:12px; box-shadow:0 6px 18px rgba(2,6,23,0.06); transition:transform .25s }
+    .property-card img{ width:100%; height:160px; object-fit:cover; border-radius:8px }
+    .three-viewer{ width:100%; height:360px; display:flex; align-items:center; justify-content:center; perspective:1200px; margin-top:18px }
+
+    /* contact & footer */
+    .contact-section{ padding:28px }
+    .contact-grid{ display:grid; grid-template-columns:1fr 360px; gap:18px }
+    .contact-card, .newsletter-card{ background:#fff; padding:18px; border-radius:10px }
+    .contact-card input, .contact-card textarea, .newsletter-card input{ width:100%; padding:10px; margin:6px 0; border-radius:8px; border:1px solid #e6e9ee }
+
+    .site-footer{ display:flex; justify-content:space-between; padding:16px 28px; background:#0b1220; color:#cbd5e1 }
+
+    @media(max-width:900px){
+      .hero{ grid-template-columns:1fr; height:62vh }
+      .contact-grid{ grid-template-columns:1fr }
+    }
+
+    /* small utility */
+    .hidden{ display:none !important; }
+    .notice{ padding:10px;background:#fff6dd;border:1px solid #f3d18a;border-radius:8px;color:#6b4b00;margin-bottom:12px }
+    .small{ font-size:13px;color:var(--muted) }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">🏛️</div>
+      <div>
+        <h1>Victorious Homes</h1>
+        <small>Design • Plan • Deliver</small>
+      </div>
+    </div>
+    <nav class="main-nav">
+      <a href="#hero">Home</a>
+      <a href="#properties">Properties</a>
+      <a href="#planner">Planner</a>
+      <a href="#why">Why Us</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <!-- HERO: video with PiP + fallback image -->
+  <section id="hero" class="hero">
+    <div class="media-wrap" aria-hidden="false">
+      <!-- NOTE: rename your video to assets/hero.mp4 (no spaces) -->
+      <video id="heroVideo" autoplay muted playsinline loop preload="metadata">
+        <source src="assets/hero.mp4" type="video/mp4">
+        <!-- fallback -->
+      </video>
+      <img id="heroImage" src="assets/victorious.png" alt="Victorious Homes showcase" style="display:none">
+      <!-- Play fallback button if autoplay blocked -->
+      <button id="playFallback" class="hidden" style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:12px 20px;border-radius:10px;background:rgba(0,0,0,0.6);color:#fff;font-weight:700">Play Video</button>
+    </div>
+
+    <div class="hero-overlay">
+      <h2>Building Dreams. Planning Futures.</h2>
+      <p>Premium real estate & urban planning. Trusted, transparent, Victorious.</p>
+      <div class="hero-actions">
+        <button id="switchMediaBtn">Switch to Image</button>
+        <button id="pipBtn">Toggle PiP (Video)</button>
+        <a class="cta" href="#properties">View Featured Properties</a>
+      </div>
+      <div id="videoNotice" class="notice hidden small"></div>
+    </div>
+  </section>
+
+  <!-- QUICK STATS -->
+  <section class="quick-stats" aria-hidden="false">
+    <div class="stat">🏗️ <strong>120+</strong> Projects</div>
+    <div class="stat">📍 <strong>10</strong> Cities</div>
+    <div class="stat">👥 <strong>500+</strong> Happy Clients</div>
+    <div class="stat">🔒 <strong>Trusted</strong> Since 2010</div>
+  </section>
+
+  <!-- PROPERTIES (kept simple) -->
+  <section id="properties" class="properties">
+    <div class="section-head">
+      <h2>Featured Properties</h2>
+      <div class="filters">
+        <select id="filterType">
+          <option value="all">All Types</option>
+          <option value="villa">Villa</option>
+          <option value="apartment">Apartment</option>
+          <option value="office">Office</option>
+        </select>
+        <input id="filterSearch" placeholder="Search city or name...">
+      </div>
+    </div>
+
+    <div class="property-grid" id="propertyGrid"></div>
+
+    <h3 style="margin-top:2rem">Explore a property in 3D</h3>
+    <div class="viewer-controls">
+      <button id="viewerReset">Reset View</button>
+      <label>Drag to rotate • Use buttons to spin</label>
+      <div class="spin-buttons">
+        <button data-rot="90">⟲ 90°</button>
+        <button data-rot="-90">90° ⟳</button>
+      </div>
+    </div>
+    <div class="three-viewer" id="threeViewer" aria-hidden="false" title="3D Property Viewer">
+      <div class="cube" id="cube" style="width:320px;height:220px;transform-style:preserve-3d;transition:transform .6s">
+        <div class="face front"><img src="assets/villa.webp" alt=""></div>
+        <div class="face back"><img src="assets/office.jpg" alt=""></div>
+        <div class="face right"><img src="assets/beachfront.webp" alt=""></div>
+        <div class="face left"><img src="assets/cottage.webp" alt=""></div>
+        <div class="face top"><img src="assets/cottage.webp" alt=""></div>
+        <div class="face bottom"><img src="assets/urban.webp" alt=""></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANNER / Mortgage Calculator & Site Planner -->
+  <section id="planner" class="planner">
+    <h2>Mortgage Calculator & Site Planner</h2>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:18px;">
+      <div class="mortgage-card">
+        <h3>Mortgage Calculator</h3>
+        <label>Loan Amount (₦)</label>
+        <input id="loanAmount" type="number" value="50000000">
+        <label>Annual Interest Rate (%)</label>
+        <input id="interestRate" type="number" step="0.01" value="9.5">
+        <label>Term (years)</label>
+        <input id="loanYears" type="number" value="20">
+        <button id="calcMortgage">Calculate</button>
+
+        <div id="mortgageResult" class="mortgage-result hidden">
+          <p>Monthly Payment: <strong id="monthlyPay"></strong></p>
+          <p>Total Payment: <strong id="totalPay"></strong></p>
+          <p>Total Interest: <strong id="totalInterest"></strong></p>
+          <button id="downloadAmort">Download Amortization CSV</button>
+        </div>
+      </div>
+
+      <div class="site-planner">
+        <h3>Quick Site Planner (Area → Units)</h3>
+        <label>Site Area (sqm)</label>
+        <input id="siteArea" type="number" value="1000">
+        <label>Avg Unit Size (sqm)</label>
+        <input id="unitSize" type="number" value="80">
+        <button id="calcUnits">Estimate Units</button>
+        <div id="unitsResult" class="units-result hidden"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY US & testimonials -->
+  <section id="why" class="why-choose">
+    <h2>Why Victorious Homes</h2>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:12px">
+      <div class="why-card">✅ End-to-end project delivery</div>
+      <div class="why-card">🎯 Data-driven urban planning</div>
+      <div class="why-card">🤝 Transparent contracts</div>
+      <div class="why-card">🌿 Sustainable & efficient designs</div>
+    </div>
+
+    <h3>Client Testimonials</h3>
+    <div class="testimonials">
+      <blockquote>"Victorious transformed our land into a beautiful housing estate — professional and fast." — A. Okoye</blockquote>
+      <blockquote>"The planning team saved us months of work and thousands in cost." — L. Musa</blockquote>
+    </div>
+  </section>
+
+  <!-- CONTACT & Newsletter -->
+  <section id="contact" class="contact-section">
+    <div class="contact-grid">
+      <div class="contact-card">
+        <h2>Contact Us</h2>
+        <form id="contactForm">
+          <input id="cname" required placeholder="Name">
+          <input id="cemail" type="email" required placeholder="Email">
+          <input id="cphone" placeholder="Phone">
+          <textarea id="cmessage" required placeholder="Message..." rows="5"></textarea>
+          <button type="submit">Send Message</button>
+        </form>
+      </div>
+      <div class="newsletter-card">
+        <h3>Subscribe to Updates</h3>
+        <p>Get market reports, new projects & offers.</p>
+        <input id="newsletterEmail" placeholder="you@mail.com">
+        <button id="subscribeBtn">Subscribe</button>
+        <div class="contact-info small" style="margin-top:10px">
+          <p>📍 Lagos, Nigeria</p>
+          <p>✉️ hello@victorioushomes.ng</p>
+          <p>📞 +234 916 544 5200</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <div>© <span id="year"></span> Victorious Homes</div>
+    <div class="socials">Follow: <a href="#">LinkedIn</a> • <a href="#">Instagram</a></div>
+  </footer>
+
+  <!-- LIVE CHAT WIDGET (simple) -->
+  <div id="chatWidget" style="position:fixed;right:20px;bottom:80px;width:340px;height:460px;background:#fff;border-radius:12px;box-shadow:0 20px 60px rgba(2,6,23,0.2);display:flex;flex-direction:column;overflow:hidden;z-index:200;transform:translateY(60px);opacity:0;pointer-events:none;transition:all .25s">
+    <div style="background:var(--accent);color:white;padding:12px;display:flex;justify-content:space-between;align-items:center">
+      <strong>Victorious Support</strong>
+      <button id="closeChat" style="background:transparent;border:none;color:white;font-size:18px">✕</button>
+    </div>
+    <div id="chatBody" style="flex:1;padding:12px;overflow:auto;background:linear-gradient(180deg,#f8fafc,#fff)"></div>
+    <div style="display:flex;padding:8px;gap:8px;border-top:1px solid #edf2f7">
+      <input id="chatInput" placeholder="Ask about properties..." style="flex:1;padding:8px;border-radius:8px;border:1px solid #e6e9ee">
+      <button id="sendChat">Send</button>
+    </div>
+  </div>
+  <button id="chatToggle" style="position:fixed;right:20px;bottom:20px;padding:14px;border-radius:999px;background:var(--accent);color:white;border:none;box-shadow:0 8px 24px rgba(11,92,255,0.18);cursor:pointer">💬 Chat</button>
+
+  <!-- ---------- Scripts: main logic + Firebase (module) ---------- -->
+  <script type="module">
+    /********************* FIREBASE (modular) *********************
+     * 1) Create a Firebase project (see guide below)
+     * 2) Enable Firestore
+     * 3) Add a Web App and copy config into firebaseConfig below
+     *************************************************************/
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+    // ====== Replace the object below with your project's config (from Firebase console) ======
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT.appspot.com",
+      messagingSenderId: "SENDER_ID",
+      appId: "APP_ID"
+    };
+
+    // Initialize Firebase
+    let db, auth;
+    try {
+      const app = initializeApp(firebaseConfig);
+      db = getFirestore(app);
+      auth = getAuth();
+      // sign in anonymously so we can use Firestore for chat + forms in a small demo
+      signInAnonymously(auth).catch(()=>{/* ignore if blocked */});
+    } catch (err) {
+      console.warn('Firebase init error (replace firebaseConfig with your values to enable):', err);
+    }
+
+    /********************** UI wiring & core logic **********************/
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* HERO video handling */
+    const video = document.getElementById('heroVideo');
+    const image = document.getElementById('heroImage');
+    const switchBtn = document.getElementById('switchMediaBtn');
+    const pipBtn = document.getElementById('pipBtn');
+    const playFallback = document.getElementById('playFallback');
+    const videoNotice = document.getElementById('videoNotice');
+
+    // Ensure video path exists (user must place file at assets/hero.mp4)
+    function showNotice(msg){ videoNotice.textContent = msg; videoNotice.classList.remove('hidden'); }
+    function hideNotice(){ videoNotice.classList.add('hidden'); }
+
+    async function tryAutoplay(){
+      hideNotice();
+      try {
+        await video.play();
+        playFallback.classList.add('hidden');
+      } catch (err) {
+        // Autoplay blocked — show manual play button
+        playFallback.classList.remove('hidden');
+        showNotice('Autoplay blocked — tap Play to enable video. Mobile browsers often block autoplay.');
+      }
+    }
+
+    // run attempt on load
+    window.addEventListener('load', () => {
+      // play only if video has a source; otherwise fallback to image
+      if(!video.querySelector('source') || !video.querySelector('source').src) {
+        video.style.display = 'none';
+        image.style.display = 'block';
+        return;
+      }
+      tryAutoplay();
+    });
+
+    // fallback manual play
+    playFallback.addEventListener('click', async () => {
+      try { await video.play(); playFallback.classList.add('hidden'); hideNotice(); } catch(e){ console.error(e); }
+    });
+
+    // Switch media
+    let showingVideo = true;
+    image.style.display = 'none';
+    switchBtn.addEventListener('click', () => {
+      showingVideo = !showingVideo;
+      if(showingVideo){
+        video.style.display = 'block';
+        image.style.display = 'none';
+        switchBtn.textContent = 'Switch to Image';
+        tryAutoplay();
+      } else {
+        video.style.display = 'none';
+        image.style.display = 'block';
+        if (document.pictureInPictureElement) document.exitPictureInPicture().catch(()=>{});
+        switchBtn.textContent = 'Switch to Video';
+      }
+    });
+
+    // PiP toggle (feature-detect)
+    if (!document.pictureInPictureEnabled) pipBtn.disabled = true;
+    pipBtn.addEventListener('click', async () => {
+      try {
+        if (video !== document.pictureInPictureElement) {
+          await video.requestPictureInPicture();
+        } else {
+          await document.exitPictureInPicture();
+        }
+      } catch (err) {
+        alert('PiP unavailable on this browser or the video is not allowed to enter PiP.');
+        console.error(err);
+      }
+    });
+
+    // If video errors (missing file), show image fallback
+    video.addEventListener('error', () => {
+      console.error('Video failed to load — showing fallback image.');
+      video.style.display = 'none';
+      image.style.display = 'block';
+      showNotice('Video file missing or failed to load. Put your file at assets/hero.mp4');
+    });
+
+    /* ====== Properties dataset & filter (same logic, cleaned) ====== */
+    const properties = [
+      { id:1, type:'villa', title:'Elegant 4-Bedroom Villa', city:'Lagos', price:45000000, img:'assets/villa.webp' },
+      { id:2, type:'office', title:'Modern Office Complex', city:'Abuja', price:120000000, img:'assets/office.jpg' },
+      { id:3, type:'apartment', title:'Beachfront Luxury Apartment', city:'Port Harcourt', price:65000000, img:'assets/beachfront.webp' },
+      { id:4, type:'villa', title:'Hillside Cottage', city:'Ibadan', price:32000000, img:'assets/cottage.webp' },
+      { id:5, type:'apartment', title:'Urban Loft', city:'Lagos', price:28000000, img:'assets/urban.webp' }
+    ];
+
+    const grid = document.getElementById('propertyGrid');
+    const typeSel = document.getElementById('filterType');
+    const searchInput = document.getElementById('filterSearch');
+
+    function renderProps(list){
+      grid.innerHTML = '';
+      list.forEach(p=>{
+        const el = document.createElement('article');
+        el.className = 'property-card';
+        el.innerHTML = `
+          <img src="${p.img}" alt="${p.title}">
+          <h3>${p.title}</h3>
+          <p>${p.city} • ₦${(p.price).toLocaleString()}</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px">
+            <button class="view3d" data-id="${p.id}">View 3D</button>
+            <button class="inquire" data-id="${p.id}">Inquire</button>
+          </div>
+        `;
+        grid.appendChild(el);
+      });
+    }
+    renderProps(properties);
+    typeSel.addEventListener('change', applyFilter);
+    searchInput.addEventListener('input', applyFilter);
+    function applyFilter(){
+      const t = typeSel.value;
+      const q = searchInput.value.trim().toLowerCase();
+      const res = properties.filter(p => (t === 'all' || p.type === t) && (q === '' || p.title.toLowerCase().includes(q) || p.city.toLowerCase().includes(q)));
+      renderProps(res);
+    }
+
+    /* ====== 3D cube rotation (kept as-is, small safety) ====== */
+    const cube = document.getElementById('cube');
+    let rotX = -10, rotY = 25, isDown=false, startX=0, startY=0;
+    function updateCube(){ cube.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`; }
+    updateCube();
+    document.getElementById('viewerReset').addEventListener('click', ()=>{ rotX=-10; rotY=25; updateCube(); });
+    document.querySelectorAll('.spin-buttons button').forEach(b=>{ b.addEventListener('click', ()=>{ rotY += parseInt(b.dataset.rot); updateCube(); }); });
+    cube.addEventListener('pointerdown', (e)=>{ isDown=true; startX=e.clientX; startY=e.clientY; cube.setPointerCapture(e.pointerId); });
+    window.addEventListener('pointermove', (e)=>{ if(!isDown) return; const dx = e.clientX - startX; const dy = e.clientY - startY; rotY += dx * 0.3; rotX -= dy * 0.2; startX = e.clientX; startY = e.clientY; updateCube(); });
+    window.addEventListener('pointerup', ()=> isDown=false);
+
+    // View 3D button loads faces
+    grid.addEventListener('click', (e)=>{
+      if(e.target.classList.contains('view3d')){
+        const id = +e.target.dataset.id;
+        const p = properties.find(x=>x.id===id);
+        const faces = ['assets/villa.webp','assets/office.jpg','assets/beachfront.webp','assets/beachfront.webp','assets/cottage.webp','assets/urban.webp'];
+        document.querySelectorAll('#cube .face img').forEach((img,i)=> img.src = faces[i] || p.img );
+        window.scrollTo({top:document.getElementById('threeViewer').offsetTop - 60, behavior:'smooth'});
+      }
+    });
+
+    /* ====== Mortgage Calculator & CSV download ====== */
+    function currency(x){ return '₦' + Number(x).toLocaleString(); }
+    const calcBtn = document.getElementById('calcMortgage');
+    const loanAmount = document.getElementById('loanAmount');
+    const rate = document.getElementById('interestRate');
+    const years = document.getElementById('loanYears');
+    const resultWrap = document.getElementById('mortgageResult');
+    const monthlyPayEl = document.getElementById('monthlyPay');
+    const totalPayEl = document.getElementById('totalPay');
+    const totalInterestEl = document.getElementById('totalInterest');
+    const downloadBtn = document.getElementById('downloadAmort');
+
+    calcBtn.addEventListener('click', ()=>{
+      const P = Number(loanAmount.value);
+      const r = Number(rate.value) / 100 / 12;
+      const n = Number(years.value) * 12;
+      if(!P || !n){ alert('Enter valid numbers'); return; }
+      const monthly = r === 0 ? (P / n) : (P * r) / (1 - Math.pow(1 + r, -n));
+      const total = monthly * n;
+      const interest = total - P;
+      monthlyPayEl.textContent = currency(monthly.toFixed(2));
+      totalPayEl.textContent = currency(total.toFixed(2));
+      totalInterestEl.textContent = currency(interest.toFixed(2));
+      resultWrap.classList.remove('hidden');
+      window._amort = generateAmort(P, r, n, monthly);
+    });
+
+    function generateAmort(P,r,n,monthly){
+      let bal = P, arr = [];
+      for(let i=1;i<=n;i++){
+        const interest = bal * r;
+        const principal = monthly - interest;
+        bal = bal - principal;
+        arr.push({month:i, payment:monthly, principal:principal, interest:interest, balance: Math.max(bal,0)});
+      }
+      return arr;
+    }
+    downloadBtn.addEventListener('click', ()=>{
+      if(!window._amort){ alert('Generate amortization first'); return; }
+      const rows = [['Month','Payment','Principal','Interest','Balance']];
+      window._amort.forEach(r=> rows.push([r.month, r.payment.toFixed(2), r.principal.toFixed(2), r.interest.toFixed(2), r.balance.toFixed(2)]));
+      const csv = rows.map(r=> r.join(',')).join('\n');
+      const blob = new Blob([csv], {type:'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'amortization.csv'; a.click(); URL.revokeObjectURL(url);
+    });
+
+    /* ====== Site planner ====== */
+    document.getElementById('calcUnits').addEventListener('click', ()=>{
+      const area = Number(document.getElementById('siteArea').value);
+      const unit = Number(document.getElementById('unitSize').value);
+      if(!area || !unit){ alert('Enter valid numbers'); return; }
+      const units = Math.floor(area / unit);
+      const res = document.getElementById('unitsResult');
+      res.classList.remove('hidden');
+      res.textContent = `Estimated units: ${units} (approx.) — assumes ${unit} sqm per unit excluding roads & amenities.`;
+    });
+
+    /* ====== Contact & Newsletter handlers (and send to Firestore if configured) ====== */
+    document.getElementById('contactForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const name = document.getElementById('cname').value.trim();
+      const email = document.getElementById('cemail').value.trim();
+      const phone = document.getElementById('cphone').value.trim();
+      const message = document.getElementById('cmessage').value.trim();
+      if(!name || !email || !message) return alert('Please fill required fields.');
+      // Save to Firestore if available, otherwise just show success
+      if(typeof db !== 'undefined'){
+        try {
+          await addDoc(collection(db, 'contacts'), { name, email, phone, message, createdAt: serverTimestamp() });
+        } catch (err) { console.error('Firestore contact write failed:', err); }
+      }
+      alert('Thanks! Message received. We will contact you shortly.');
+      e.target.reset();
+    });
+
+    document.getElementById('subscribeBtn').addEventListener('click', async ()=>{
+      const em = document.getElementById('newsletterEmail').value.trim();
+      if(!em || !em.includes('@')) return alert('Enter a valid email.');
+      if(typeof db !== 'undefined'){
+        try { await addDoc(collection(db, 'subscribers'), { email: em, createdAt: serverTimestamp() }); }
+        catch (err){ console.error('subscribe error', err); }
+      }
+      alert('Subscribed — check your inbox for confirmation.');
+      document.getElementById('newsletterEmail').value = '';
+    });
+
+    /* ====== Chat widget (store messages in Firestore 'chats' collection; also local fallback) ====== */
+    const chatToggle = document.getElementById('chatToggle');
+    const chatWidget = document.getElementById('chatWidget');
+    const closeChat = document.getElementById('closeChat');
+    const chatBody = document.getElementById('chatBody');
+    const chatInput = document.getElementById('chatInput');
+    const sendChat = document.getElementById('sendChat');
+
+    function openChat(){ chatWidget.style.transform='translateY(0)'; chatWidget.style.opacity='1'; chatWidget.style.pointerEvents='auto'; chatToggle.style.display='none'; loadChatHistory(); }
+    function closeChatFn(){ chatWidget.style.transform='translateY(60px)'; chatWidget.style.opacity='0'; chatWidget.style.pointerEvents='none'; chatToggle.style.display='block'; }
+    chatToggle.addEventListener('click', openChat);
+    closeChat.addEventListener('click', closeChatFn);
+
+    function appendMsg(text, who='agent'){ const div = document.createElement('div'); div.className = 'msg ' + (who==='user' ? 'user' : 'agent'); div.innerHTML = `<div style="padding:8px 12px;border-radius:12px;max-width:80%;background:${who==='user'?'var(--accent)':'#f1f5f9'};color:${who==='user'?'#fff':'#111'}">${text}</div>`; chatBody.appendChild(div); chatBody.scrollTop = chatBody.scrollHeight; }
+
+    // simple local store if Firestore not available
+    function saveLocalChat(hist){ localStorage.setItem('vh_chat', JSON.stringify(hist)); }
+    function loadChatHistory(){
+      chatBody.innerHTML='';
+      const hist = JSON.parse(localStorage.getItem('vh_chat') || '[]');
+      hist.forEach(m => appendMsg(m.text, m.who));
+      // also subscribe to firestore chats if available
+      if(typeof db !== 'undefined'){
+        const q = query(collection(db, 'chats'), orderBy('createdAt'));
+        try {
+          onSnapshot(q, snap => {
+            // clear & re-render from firestore (simple approach)
+            chatBody.innerHTML = '';
+            snap.forEach(doc => {
+              const d = doc.data();
+              appendMsg(d.text, d.who || 'agent');
+            });
+          });
+        } catch(e) { console.warn('Realtime chat not available:', e); }
+      }
+    }
+
+    function pushLocalChat(text, who){
+      const hist = JSON.parse(localStorage.getItem('vh_chat') || '[]');
+      hist.push({ text, who, t: Date.now() });
+      saveLocalChat(hist);
+    }
+
+    sendChat.addEventListener('click', ()=> sendUserChat());
+    chatInput.addEventListener('keydown', (e)=> { if(e.key==='Enter') sendUserChat(); });
+
+    async function sendUserChat(){
+      const txt = chatInput.value.trim();
+      if(!txt) return;
+      appendMsg(txt,'user');
+      pushLocalChat(txt,'user');
+      chatInput.value='';
+      // store in firestore if available
+      if(typeof db !== 'undefined'){
+        try { await addDoc(collection(db,'chats'), { text: txt, who: 'user', createdAt: serverTimestamp() }); }
+        catch(err){ console.error('chat write failed', err); }
+      }
+      // fake bot reply & store
+      setTimeout(async ()=> {
+        const reply = botReply(txt);
+        appendMsg(reply,'agent');
+        pushLocalChat(reply,'agent');
+        if(typeof db !== 'undefined'){
+          try { await addDoc(collection(db,'chats'), { text: reply, who: 'agent', createdAt: serverTimestamp() }); }
+          catch(e){ console.error('bot reply store failed', e); }
+        }
+      }, 600);
+    }
+
+    function botReply(text){
+      const t = text.toLowerCase();
+      if(t.includes('price')||t.includes('cost')) return 'We have flexible pricing; which property are you interested in?';
+      if(t.includes('mortgage')||t.includes('loan')) return 'Try our mortgage calculator in the Planner section — it gives monthly payments and downloadable amortization.';
+      if(t.includes('agent')||t.includes('contact')) return 'One of our agents will reach out. Please share your phone or email.';
+      return 'Thanks for reaching out — we will reply within 24 hours. For urgent matters call +234 916 544 5200.';
+    }
+
+    // small prompt animation (once)
+    if(!localStorage.getItem('vh_seen_chat_prompt')){ localStorage.setItem('vh_seen_chat_prompt','1'); setTimeout(()=> chatToggle.classList.add('pulse'), 1500); setTimeout(()=> chatToggle.classList.remove('pulse'), 6500); }
+  </script>
+</body>
+</html>
